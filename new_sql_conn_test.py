@@ -3,13 +3,17 @@ from sqlalchemy.exc import SQLAlchemyError
 
 def connect_to_mssql(server, database, username, password):
     try:
-        connection_string = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server"
+        connection_string = (
+            "mssql+pyodbc://{username}:{password}@{server}/{database}"
+            "?driver=ODBC+Driver+17+for+SQL+Server"
+        ).format(username=username, password=password, server=server, database=database)
+        
         engine = create_engine(connection_string)
         connection = engine.connect()
         print("Connection successful!")
         return connection
     except SQLAlchemyError as e:
-        print("Error while connecting to database:", e)
+        print("Error while connecting to database: {}".format(e))
         return None
 
 # Replace these variables with your actual credentials
