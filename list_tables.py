@@ -16,13 +16,16 @@ def connect_to_mssql(server, database, username, password):
         print("Error while connecting to database: {}".format(e))
         return None
 
-def list_tables(connection):
+def list_and_count_tables(connection):
     try:
         inspector = inspect(connection)
         tables = inspector.get_table_names()
         print("Tables in the database:")
         for table in tables:
             print(table)
+        
+        table_count = len(tables)
+        print("\nTotal number of tables: {}".format(table_count))
     except SQLAlchemyError as e:
         print("Error while listing tables: {}".format(e))
 
@@ -35,7 +38,7 @@ password = 'your_password'
 # Attempt to connect
 conn = connect_to_mssql(server, database, username, password)
 
-# List tables if the connection was successful
+# List tables and count them if the connection was successful
 if conn:
-    list_tables(conn)
+    list_and_count_tables(conn)
     conn.close()
